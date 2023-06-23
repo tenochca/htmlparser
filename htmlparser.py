@@ -9,23 +9,27 @@ def gethtml(fullurl):
 
 from html.parser import HTMLParser
 
-class simpleparser(HTMLParser):
-    'parser to get just the tags and data'
+class ImageParser(HTMLParser):
+    'parser to get all the image links in a website'
+    def __init__(self):
+        HTMLParser.__init__(self)
+        self.images = []
 
     def handle_starttag(self, tag, attrs):
-        print('START TAG: ', tag)
-
-    def handle_endtag(self, tag):
-        print('END TAG: ', tag)
-
-    def handle_data(self, data):
-        d = data.strip()
-        print('***'+ d + '***')
-
+        if tag == 'img':
+            #print(tag, attrs)
+            for i in attrs:
+                if i[0] == 'src':
+                    self.images.append(i[1])
+                    
 
 fullurl = input('URL: ')
 code = gethtml(fullurl)
-parser = simpleparser()
+parser = ImageParser()
 parser.feed(code)
+imagelist = parser.images
+print(imagelist)
+
+
 
 
